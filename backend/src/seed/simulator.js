@@ -3,7 +3,7 @@ import { EmissionFactor } from '../models/EmissionFactor.js';
 import { generateCarbonTransaction } from '../services/emissionEngine.js';
 import { logger } from '../utils/logger.js';
 
-const INTERVAL_MS = 8000;
+const INTERVAL_MS = 5000;
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 // Optional: emits a live CarbonTransaction every ~8s so the dashboard visibly

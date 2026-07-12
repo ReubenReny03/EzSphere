@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import logo from '@/favicon.png';
 
 const NAV_GROUPS = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, accent: 'text' },
@@ -169,7 +170,10 @@ export const Sidebar = ({ mobileOpen, onClose }) => (
       )}
     >
       <div className="mb-6 flex items-center justify-between px-2">
-        <span className="text-lg font-semibold text-text">EcoSphere</span>
+        <span className="flex items-center gap-2">
+          <img src={logo} alt="" className="h-8 w-8 rounded-lg object-cover object-top" />
+          <span className="text-lg font-semibold text-text">EcoSphere</span>
+        </span>
         <button type="button" onClick={onClose} className="text-muted lg:hidden" aria-label="Close menu">
           <X className="h-5 w-5" />
         </button>

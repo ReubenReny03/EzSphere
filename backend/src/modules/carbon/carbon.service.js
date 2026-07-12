@@ -2,6 +2,7 @@ import { CarbonTransaction } from '../../models/CarbonTransaction.js';
 import { AppError } from '../../utils/AppError.js';
 import { parsePagination, buildMeta } from '../../utils/paginate.js';
 import { generateCarbonTransaction } from '../../services/emissionEngine.js';
+import { computeDepartmentScore } from '../../services/scoreEngine.js';
 import { getIO } from '../../config/socket.js';
 import { SOCKET_EVENTS } from '../../sockets/events.js';
 import { logger } from '../../utils/logger.js';
@@ -39,6 +40,11 @@ export const create = async (data, userId) => {
     getIO().emit(SOCKET_EVENTS.CARBON_NEW, txn);
   } catch (err) {
     logger.warn({ err }, 'Socket not available — skipping CARBON_NEW emit');
+  }
+  try {
+    await computeDepartmentScore(data.department);
+  } catch (err) {
+    logger.warn({ err }, 'Score recompute failed after carbon transaction');
   }
   return txn;
 };

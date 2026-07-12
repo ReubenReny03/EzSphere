@@ -28,7 +28,10 @@ export const removeActivity = asyncHandler(async (req, res) => {
 });
 
 export const join = asyncHandler(async (req, res) => {
-  const proof = req.file ? req.file.path : undefined;
+  // multer's file.path uses the OS separator (backslashes on Windows), which
+  // would corrupt the URL this gets served at (/uploads/...) — normalize to
+  // forward slashes so the stored path is a valid URL on any OS.
+  const proof = req.file ? req.file.path.replace(/\\/g, '/') : undefined;
   const participation = await csrService.joinActivity(req.params.id, req.user.id, proof);
   return sendSuccess(res, 201, 'Joined activity', participation);
 });

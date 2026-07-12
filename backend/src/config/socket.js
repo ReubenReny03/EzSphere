@@ -1,13 +1,14 @@
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { env } from './env.js';
+import { corsOptions } from './cors.js';
 import { logger } from '../utils/logger.js';
 
 let io = null;
 
 export const initSocket = (httpServer) => {
   io = new Server(httpServer, {
-    cors: { origin: env.CLIENT_ORIGIN, credentials: true },
+    cors: corsOptions,
   });
 
   io.use((socket, next) => {
