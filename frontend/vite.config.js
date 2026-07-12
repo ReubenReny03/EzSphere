@@ -14,5 +14,6 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    host: true, // bind all interfaces so the dev server is reachable via LAN/Tailscale, not just localhost
   },
 });

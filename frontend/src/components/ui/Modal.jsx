@@ -4,12 +4,17 @@ import { cn } from '@/lib/cn';
 
 export const Modal = ({ open, onClose, title, children, className }) => {
   const contentRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return undefined;
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') onCloseRef.current();
       if (e.key === 'Tab' && contentRef.current) {
         const focusable = contentRef.current.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
@@ -30,7 +35,7 @@ export const Modal = ({ open, onClose, title, children, className }) => {
     document.addEventListener('keydown', handleKeyDown);
     contentRef.current?.querySelector('button, input, select, textarea')?.focus();
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 

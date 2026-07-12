@@ -1,15 +1,20 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { apiClient } from '@/api/client';
 import { connectSocket, disconnectSocket } from '@/lib/socket';
+import { getToken, setToken as persistToken, clearToken } from '@/lib/authToken';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => sessionStorage.getItem('socketToken'));
+  const [token, setToken] = useState(() => getToken());
   const [loading, setLoading] = useState(true);
 
   const bootstrap = useCallback(async () => {
+    if (!getToken()) {
+      setLoading(false);
+      return;
+    }
     try {
       const res = await apiClient.get('/auth/me');
       setUser(res.data.user);
@@ -34,22 +39,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const res = await apiClient.post('/auth/login', { email, password });
-    setUser(res.data.user);
+    persistToken(res.data.token);
     setToken(res.data.token);
-    sessionStorage.setItem('socketToken', res.data.token);
+    setUser(res.data.user);
     return res.data.user;
   };
 
   const logout = async () => {
-    await apiClient.post('/auth/logout');
-    setUser(null);
-    setToken(null);
-    sessionStorage.removeItem('socketToken');
-    disconnectSocket();
+    try {
+      await apiClient.post('/auth/logout');
+    } finally {
+      clearToken();
+      setToken(null);
+      setUser(null);
+      disconnectSocket();
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, token, login, logout }}>{children}</AuthContext.Provider>
   );
 };
 

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { getSocket } from '@/lib/socket';
+import { connectSocket } from '@/lib/socket';
+import { useAuth } from '@/context/AuthContext';
 import { queryKeys } from '@/api/queryKeys';
 import { pushLiveFeedItem } from '@/lib/liveFeed';
 
@@ -18,14 +19,23 @@ export const CONFETTI_EVENT = 'ecosphere:confetti';
 
 export const useSocket = () => {
   const queryClient = useQueryClient();
+  const { token } = useAuth();
 
   useEffect(() => {
-    const socket = getSocket();
-    if (!socket) return undefined;
+    if (!token) return undefined;
+    // AuthContext also connects on login, but this component (a descendant)
+    // can mount in the same React commit as that effect (an ancestor) — and
+    // child effects run before parent effects, so relying on AuthContext
+    // having already connected races and can lose. Ensure the connection
+    // here too; connectSocket is idempotent, so this is a no-op if it didn't.
+    const socket = connectSocket(token);
 
     const onNotification = (notification) => {
       toast(notification.title);
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      // Approval decisions (CSR/challenge participation) arrive as a
+      // notification and can change the recipient's own XP/points balance.
+      queryClient.invalidateQueries({ queryKey: queryKeys.me });
     };
 
     const onLeaderboardUpdate = () => {
@@ -77,5 +87,5 @@ export const useSocket = () => {
       socket.off(SOCKET_EVENTS.SCORE_UPDATED, onScoreUpdated);
       socket.off(SOCKET_EVENTS.BADGE_UNLOCKED, onBadgeUnlocked);
     };
-  }, [queryClient]);
+  }, [queryClient, token]);
 };
