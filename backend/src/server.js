@@ -5,6 +5,7 @@ import { env } from './config/env.js';
 import { connectDB } from './config/db.js';
 import { initSocket } from './config/socket.js';
 import { startOverdueScanner } from './services/overdueScanner.js';
+import { startSimulator } from './seed/simulator.js';
 import { logger } from './utils/logger.js';
 
 const start = async () => {
@@ -13,6 +14,7 @@ const start = async () => {
   const httpServer = http.createServer(app);
   initSocket(httpServer);
   startOverdueScanner();
+  if (env.ENABLE_SIMULATOR) await startSimulator();
 
   httpServer.listen(env.PORT, () => {
     logger.info(`EcoSphere backend listening on port ${env.PORT}`);
