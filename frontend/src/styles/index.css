@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @layer base {
   html {
@@ -11,6 +11,8 @@
 
   body {
     @apply font-sans antialiased;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgb(59 130 246 / 0.06), transparent);
+    background-repeat: no-repeat;
   }
 
   ::-webkit-scrollbar {

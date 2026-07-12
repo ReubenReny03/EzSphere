@@ -19,8 +19,10 @@ export const Tabs = ({ tabs, active, onChange, accent = 'text' }) => (
         aria-selected={active === tab.value}
         onClick={() => onChange(tab.value)}
         className={cn(
-          'border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
-          active === tab.value ? ACCENT_TEXT[accent] : 'border-transparent text-muted hover:text-text',
+          'rounded-t-md border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
+          active === tab.value
+            ? ACCENT_TEXT[accent]
+            : 'border-transparent text-muted hover:bg-surface2/50 hover:text-text',
         )}
       >
         {tab.label}

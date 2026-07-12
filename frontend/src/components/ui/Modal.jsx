@@ -40,7 +40,11 @@ export const Modal = ({ open, onClose, title, children, className }) => {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" role="presentation" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex animate-fade-in items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+      role="presentation"
+      onClick={onClose}
+    >
       <div
         ref={contentRef}
         role="dialog"
@@ -48,7 +52,7 @@ export const Modal = ({ open, onClose, title, children, className }) => {
         aria-label={title}
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          'max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-border bg-surface p-6',
+          'max-h-[90vh] w-full max-w-lg animate-slide-up overflow-y-auto rounded-xl border border-border bg-surface p-6 shadow-elevated',
           className,
         )}
       >

@@ -14,8 +14,8 @@ export const Select = forwardRef(({ label, error, options = [], placeholder, cla
         ref={ref}
         id={selectId}
         className={cn(
-          'rounded-lg border border-border bg-surface2 px-3 py-2 text-sm text-text',
-          'focus-visible:ring-2 focus-visible:ring-social',
+          'rounded-lg border border-border bg-surface2 px-3 py-2 text-sm text-text transition-colors',
+          'hover:border-muted/50 focus-visible:ring-2 focus-visible:ring-social',
           error && 'border-danger',
           className,
         )}

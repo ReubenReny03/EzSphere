@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Leaf } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import logo from '@/favicon.png';
 
 const loginSchema = z.object({
   email: z.string().email('Enter a valid email'),
@@ -36,14 +36,18 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg px-4">
-      <div className="w-full max-w-sm rounded-xl border border-border bg-surface p-8">
-        <div className="mb-6 flex flex-col items-center gap-2 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-env/10">
-            <Leaf className="h-6 w-6 text-env" />
-          </span>
-          <h1 className="text-lg font-semibold text-text">EcoSphere</h1>
-          <p className="text-sm text-muted">ESG Management Platform</p>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-bg px-4">
+      <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-env/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-1/3 h-72 w-72 rounded-full bg-social/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-gov/10 blur-3xl" />
+
+      <div className="relative w-full max-w-sm animate-slide-up rounded-xl border border-border bg-surface p-8 shadow-elevated">
+        <div className="mb-6 flex flex-col items-center gap-3 text-center">
+          <img src={logo} alt="EcoSphere" className="h-14 w-14 rounded-xl object-cover object-top shadow-soft" />
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-text">EcoSphere</h1>
+            <p className="text-sm text-muted">ESG Management Platform</p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">

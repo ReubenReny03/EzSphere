@@ -40,7 +40,7 @@ export const Topbar = ({ title, onMenuClick }) => {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="hidden items-center gap-3 rounded-lg border border-border bg-surface2 px-3 py-1.5 text-xs font-medium sm:flex">
+        <div className="hidden items-center gap-3 rounded-lg border border-border bg-surface2 px-3 py-1.5 text-xs font-medium shadow-soft sm:flex">
           <span className="flex items-center gap-1 text-game">
             <Zap className="h-3.5 w-3.5" />
             {formatNumber(xp)} XP
@@ -59,7 +59,7 @@ export const Topbar = ({ title, onMenuClick }) => {
               setNotifOpen((o) => !o);
               setMenuOpen(false);
             }}
-            className="relative rounded-lg p-2 text-muted hover:bg-surface2 hover:text-text"
+            className="relative rounded-lg p-2 text-muted transition-colors hover:bg-surface2 hover:text-text"
             aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
@@ -79,7 +79,7 @@ export const Topbar = ({ title, onMenuClick }) => {
               setMenuOpen((o) => !o);
               setNotifOpen(false);
             }}
-            className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-text hover:bg-surface2"
+            className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-text transition-colors hover:bg-surface2"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-surface2">
               <User className="h-4 w-4 text-muted" />
@@ -87,11 +87,15 @@ export const Topbar = ({ title, onMenuClick }) => {
             <span className="hidden sm:inline">{user?.name}</span>
           </button>
           {menuOpen && (
-            <div className={cn('absolute right-0 z-10 mt-2 w-40 rounded-lg border border-border bg-surface p-1 shadow-lg')}>
+            <div
+              className={cn(
+                'absolute right-0 z-10 mt-2 w-40 animate-fade-in rounded-lg border border-border bg-surface p-1 shadow-elevated',
+              )}
+            >
               <button
                 type="button"
                 onClick={logout}
-                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-text hover:bg-surface2"
+                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-text transition-colors hover:bg-surface2"
               >
                 <LogOut className="h-4 w-4" />
                 Log out

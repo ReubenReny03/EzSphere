@@ -9,6 +9,15 @@ const COLOR_CLASSES = {
   muted: 'bg-muted/10 text-muted border-muted/30',
 };
 
+const DOT_CLASSES = {
+  success: 'bg-success',
+  info: 'bg-info',
+  warning: 'bg-warning',
+  danger: 'bg-danger',
+  review: 'bg-review',
+  muted: 'bg-muted',
+};
+
 // §5 status → colour map. `context` disambiguates "Completed", which means
 // success for departments/challenges/CSR but info for goals/audits.
 const STATUS_MAP = {
@@ -42,11 +51,12 @@ export const Badge = ({ status, context, className }) => {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium uppercase tracking-wide',
+        'inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium uppercase tracking-wide',
         COLOR_CLASSES[color],
         className,
       )}
     >
+      <span className={cn('h-1.5 w-1.5 shrink-0 rounded-full', DOT_CLASSES[color])} />
       {status}
     </span>
   );

@@ -30,6 +30,20 @@ export default {
         xl: '0.875rem',
         lg: '0.625rem',
       },
+      boxShadow: {
+        soft: '0 1px 2px 0 rgb(0 0 0 / 0.3), 0 1px 3px 0 rgb(0 0 0 / 0.15)',
+        elevated: '0 12px 32px -8px rgb(0 0 0 / 0.5), 0 4px 12px -4px rgb(0 0 0 / 0.3)',
+      },
+      keyframes: {
+        'fade-in': { from: { opacity: 0 }, to: { opacity: 1 } },
+        'slide-up': { from: { opacity: 0, transform: 'translateY(8px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+        shimmer: { '100%': { transform: 'translateX(100%)' } },
+      },
+      animation: {
+        'fade-in': 'fade-in 0.15s ease-out',
+        'slide-up': 'slide-up 0.25s ease-out',
+        shimmer: 'shimmer 1.6s infinite',
+      },
     },
   },
   plugins: [],
