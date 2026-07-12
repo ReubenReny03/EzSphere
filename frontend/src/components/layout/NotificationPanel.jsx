@@ -22,14 +22,14 @@ export const NotificationPanel = ({ onClose }) => {
   };
 
   return (
-    <div className="absolute right-0 z-10 mt-2 w-80 rounded-lg border border-border bg-surface p-2 shadow-lg">
+    <div className="absolute right-0 z-10 mt-2 w-80 animate-fade-in rounded-lg border border-border bg-surface p-2 shadow-elevated">
       <div className="flex items-center justify-between px-2 py-1.5">
-        <span className="text-sm font-semibold text-text">Notifications</span>
+        <span className="text-sm font-semibold tracking-tight text-text">Notifications</span>
         <button
           type="button"
           onClick={() => markAllRead.mutate()}
           disabled={markAllRead.isPending || notifications.every((n) => n.read)}
-          className="flex items-center gap-1 text-xs text-muted hover:text-text disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex items-center gap-1 text-xs text-muted transition-colors hover:text-text disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Check className="h-3.5 w-3.5" />
           Mark all read
@@ -49,7 +49,7 @@ export const NotificationPanel = ({ onClose }) => {
               type="button"
               onClick={() => handleSelect(notification)}
               className={cn(
-                'flex w-full flex-col gap-0.5 rounded-md px-2 py-2 text-left hover:bg-surface2',
+                'flex w-full flex-col gap-0.5 rounded-md px-2 py-2 text-left transition-colors hover:bg-surface2',
                 !notification.read && 'bg-surface2/60',
               )}
             >

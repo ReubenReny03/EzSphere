@@ -97,6 +97,15 @@ const ACCENT_BG = {
   muted: 'bg-surface2',
 };
 
+const ACCENT_BORDER_L = {
+  env: 'border-env',
+  social: 'border-social',
+  gov: 'border-gov',
+  game: 'border-game',
+  text: 'border-text',
+  muted: 'border-muted',
+};
+
 const NavGroup = ({ group, onNavigate }) => {
   const [open, setOpen] = useState(true);
   const location = useLocation();
@@ -110,8 +119,10 @@ const NavGroup = ({ group, onNavigate }) => {
         onClick={onNavigate}
         className={({ isActive }) =>
           cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-            isActive ? cn(ACCENT_BG[group.accent], ACCENT_TEXT[group.accent]) : 'text-muted hover:bg-surface2 hover:text-text',
+            'flex items-center gap-3 rounded-lg border-l-2 border-transparent px-3 py-2 text-sm font-medium transition-colors',
+            isActive
+              ? cn(ACCENT_BG[group.accent], ACCENT_TEXT[group.accent], ACCENT_BORDER_L[group.accent])
+              : 'text-muted hover:bg-surface2 hover:text-text',
           )
         }
       >
@@ -126,7 +137,7 @@ const NavGroup = ({ group, onNavigate }) => {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-muted hover:bg-surface2 hover:text-text"
+        className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-surface2 hover:text-text"
       >
         <span className="flex items-center gap-3">
           <Icon className={cn('h-4 w-4', ACCENT_TEXT[group.accent])} />
@@ -135,7 +146,7 @@ const NavGroup = ({ group, onNavigate }) => {
         <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
       </button>
       {open && (
-        <div className="ml-7 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
+        <div className="ml-7 mt-1 flex animate-fade-in flex-col gap-0.5 border-l border-border pl-3">
           {group.items.map((item) => {
             const isActive = location.pathname === group.path && activeTab === item.tab;
             return (
@@ -145,7 +156,7 @@ const NavGroup = ({ group, onNavigate }) => {
                 onClick={onNavigate}
                 className={cn(
                   'rounded-md px-2 py-1.5 text-sm transition-colors',
-                  isActive ? ACCENT_TEXT[group.accent] : 'text-muted hover:text-text',
+                  isActive ? cn(ACCENT_BG[group.accent], ACCENT_TEXT[group.accent]) : 'text-muted hover:text-text',
                 )}
               >
                 {item.label}
@@ -171,7 +182,7 @@ export const Sidebar = ({ mobileOpen, onClose }) => (
     >
       <div className="mb-6 flex items-center justify-between px-2">
         <span className="flex items-center gap-2">
-          <img src={logo} alt="" className="h-8 w-8 rounded-lg object-cover object-top" />
+          <img src={logo} alt="" className="h-8 w-8 rounded-lg object-cover object-top shadow-soft" />
           <span className="text-lg font-semibold text-text">EcoSphere</span>
         </span>
         <button type="button" onClick={onClose} className="text-muted lg:hidden" aria-label="Close menu">

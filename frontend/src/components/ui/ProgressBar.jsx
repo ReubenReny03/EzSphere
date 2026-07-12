@@ -11,7 +11,7 @@ export const ProgressBar = ({ value = 0, accent = 'env', showLabel = true, class
   const clamped = Math.min(100, Math.max(0, value));
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface2">
+      <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface2 shadow-[inset_0_1px_2px_rgb(0,0,0,0.3)]">
         <div
           className={cn('h-full rounded-full transition-all', ACCENT_CLASSES[accent])}
           style={{ width: `${clamped}%` }}

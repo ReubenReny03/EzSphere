@@ -15,8 +15,8 @@ export const Textarea = forwardRef(({ label, error, className, id, rows = 3, ...
         id={areaId}
         rows={rows}
         className={cn(
-          'rounded-lg border border-border bg-surface2 px-3 py-2 text-sm text-text placeholder:text-muted',
-          'focus-visible:ring-2 focus-visible:ring-social',
+          'rounded-lg border border-border bg-surface2 px-3 py-2 text-sm text-text placeholder:text-muted transition-colors',
+          'hover:border-muted/50 focus-visible:ring-2 focus-visible:ring-social',
           error && 'border-danger',
           className,
         )}

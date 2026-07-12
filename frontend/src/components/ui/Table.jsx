@@ -19,7 +19,7 @@ export const Table = ({ columns, data, loading, emptyMessage = 'No records found
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border">
+    <div className="overflow-x-auto rounded-lg border border-border shadow-soft">
       <table className="w-full text-left text-sm">
         <thead className="bg-surface2">
           <tr>
@@ -27,7 +27,7 @@ export const Table = ({ columns, data, loading, emptyMessage = 'No records found
               <th
                 key={col.key}
                 className={cn(
-                  'px-4 py-3 font-medium text-muted',
+                  'px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted',
                   col.numeric && 'text-right',
                 )}
               >
@@ -40,7 +40,10 @@ export const Table = ({ columns, data, loading, emptyMessage = 'No records found
           {data.map((row, i) => (
             <tr
               key={row[keyField] ?? i}
-              className={cn('border-t border-border hover:bg-surface2/60', i % 2 === 1 && 'bg-surface2/20')}
+              className={cn(
+                'border-t border-border transition-colors hover:bg-surface2/60',
+                i % 2 === 1 && 'bg-surface2/20',
+              )}
             >
               {columns.map((col) => (
                 <td key={col.key} className={cn('px-4 py-3 text-text', col.numeric && 'text-right tabular-nums')}>
