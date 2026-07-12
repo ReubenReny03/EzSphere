@@ -1,19 +1,26 @@
-import { FileBarChart } from 'lucide-react';
-import { Card } from '@/components/ui/Card';
-import { EmptyState } from '@/components/ui/EmptyState';
+import { Leaf, Users, ShieldCheck, FileBarChart } from 'lucide-react';
+import { useEnvironmentalReport, useSocialReport, useGovernanceReport, useESGSummaryReport } from '@/api/hooks/useReports';
+import { ReportCard } from './ReportCard';
+import { CustomReportBuilder } from './CustomReportBuilder';
 
-const REPORT_CARDS = ['Environmental Report', 'Social Report', 'Governance Report', 'ESG Summary'];
+const Reports = () => {
+  const environmental = useEnvironmentalReport({ months: 12 });
+  const social = useSocialReport({});
+  const governance = useGovernanceReport({});
+  const esgSummary = useESGSummaryReport();
 
-const Reports = () => (
-  <div className="flex flex-col gap-6">
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {REPORT_CARDS.map((title) => (
-        <Card key={title} title={title} icon={FileBarChart}>
-          <EmptyState message="Report generation & export ship in Phase 1" />
-        </Card>
-      ))}
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ReportCard title="Environmental Report" icon={Leaf} type="environmental" query={environmental} params={{ months: 12 }} />
+        <ReportCard title="Social Report" icon={Users} type="social" query={social} params={{}} />
+        <ReportCard title="Governance Report" icon={ShieldCheck} type="governance" query={governance} params={{}} />
+        <ReportCard title="ESG Summary" icon={FileBarChart} type="esg-summary" query={esgSummary} params={{}} />
+      </div>
+
+      <CustomReportBuilder />
     </div>
-  </div>
-);
+  );
+};
 
 export default Reports;
