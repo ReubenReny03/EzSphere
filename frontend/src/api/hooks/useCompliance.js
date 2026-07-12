@@ -14,6 +14,30 @@ export const useAudits = (filters = {}) =>
     queryFn: () => apiClient.get('/audits', { params: filters }),
   });
 
+export const useCreateAudit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => apiClient.post('/audits', data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['audits'] }),
+  });
+};
+
+export const useUpdateAudit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => apiClient.patch(`/audits/${id}`, data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['audits'] }),
+  });
+};
+
+export const useDeleteAudit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => apiClient.delete(`/audits/${id}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['audits'] }),
+  });
+};
+
 const invalidateCompliance = (queryClient) => {
   queryClient.invalidateQueries({ queryKey: ['compliance'] });
   queryClient.invalidateQueries({ queryKey: queryKeys.scoringOverview });
