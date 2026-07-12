@@ -148,19 +148,18 @@ export const computeDepartmentScore = async (deptId) => {
     { upsert: true, new: true },
   );
 
+  try {
+    getIO().emit(SOCKET_EVENTS.SCORE_UPDATED, { period, departmentId: deptId.toString() });
+  } catch (err) {
+    logger.warn({ err }, 'Socket not available — skipping SCORE_UPDATED emit');
+  }
+
   return { snapshot, environmental, social, governance };
 };
 
 export const computeAllAndCache = async (period = currentPeriod()) => {
   const departments = await Department.find({ status: 'active' });
   const results = await Promise.all(departments.map((d) => computeDepartmentScore(d._id)));
-
-  try {
-    getIO().emit(SOCKET_EVENTS.SCORE_UPDATED, { period, count: results.length });
-  } catch (err) {
-    logger.warn({ err }, 'Socket not available — skipping SCORE_UPDATED emit');
-  }
-
   return results.filter(Boolean);
 };
 

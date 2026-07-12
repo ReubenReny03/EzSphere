@@ -4,7 +4,8 @@ import { AppError } from '../utils/AppError.js';
 import { asyncHandler } from './asyncHandler.js';
 
 export const requireAuth = asyncHandler(async (req, res, next) => {
-  const token = req.cookies?.token || req.headers.authorization?.replace('Bearer ', '');
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
   if (!token) throw new AppError(401, 'Authentication required');
 
   try {

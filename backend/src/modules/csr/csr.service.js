@@ -53,14 +53,18 @@ export const joinActivity = async (activityId, employeeId, proof) => {
     throw new AppError(409, 'Activity is at capacity');
   }
 
-  const existing = await EmployeeParticipation.findOne({ employee: employeeId, activity: activityId });
-  if (existing) throw new AppError(409, 'You have already joined this activity');
-
-  const participation = await EmployeeParticipation.create({
+  const existing = await EmployeeParticipation.findOne({
     employee: employeeId,
     activity: activityId,
-    proof,
+    approvalStatus: { $ne: 'Rejected' },
   });
+  if (existing) throw new AppError(409, 'You have already joined this activity');
+
+  const participation = await EmployeeParticipation.findOneAndUpdate(
+    { employee: employeeId, activity: activityId },
+    { proof, approvalStatus: 'Pending', pointsEarned: 0, completionDate: null, reviewedBy: null },
+    { upsert: true, new: true },
+  );
 
   await CSRActivity.recomputeJoinedCount(activityId);
 

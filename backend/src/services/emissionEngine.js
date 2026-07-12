@@ -4,6 +4,7 @@ import { Setting } from '../models/Setting.js';
 import { AppError } from '../utils/AppError.js';
 import { getIO } from '../config/socket.js';
 import { SOCKET_EVENTS } from '../sockets/events.js';
+import { computeDepartmentScore } from './scoreEngine.js';
 import { logger } from '../utils/logger.js';
 
 // Business rule: auto emission calc. If flags.autoEmissionCalc is on, a
@@ -41,6 +42,12 @@ export const generateCarbonTransaction = async ({
     getIO().emit(SOCKET_EVENTS.CARBON_NEW, transaction);
   } catch (err) {
     logger.warn({ err }, 'Socket not available — skipping CARBON_NEW emit');
+  }
+
+  try {
+    await computeDepartmentScore(department);
+  } catch (err) {
+    logger.warn({ err }, 'Score recompute failed after carbon transaction');
   }
 
   return transaction;
