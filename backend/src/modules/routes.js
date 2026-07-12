@@ -15,6 +15,7 @@ import challengesRoutes from './challenges/challenges.routes.js';
 import auditsRoutes from './audits/audits.routes.js';
 import complianceRoutes from './compliance/compliance.routes.js';
 import gamificationRoutes from './gamification/gamification.routes.js';
+import reportsRoutes from './reports/reports.routes.js';
 import notificationsRoutes from './notifications/notifications.routes.js';
 import settingsRoutes from './settings/settings.routes.js';
 
@@ -36,6 +37,7 @@ router.use('/challenges', challengesRoutes);
 router.use('/audits', auditsRoutes);
 router.use('/compliance', complianceRoutes);
 router.use('/gamification', gamificationRoutes);
+router.use('/reports', reportsRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/settings', settingsRoutes);
 
