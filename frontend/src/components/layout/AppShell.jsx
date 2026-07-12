@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { ModuleTabs } from './ModuleTabs';
-import { useSocket } from '@/hooks/useSocket';
+import { Confetti } from '@/components/ui/Confetti';
+import { useSocket, CONFETTI_EVENT } from '@/hooks/useSocket';
 
 const PAGE_TITLES = {
   '/dashboard': 'Dashboard',
@@ -17,8 +18,15 @@ const PAGE_TITLES = {
 
 export const AppShell = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [confettiKey, setConfettiKey] = useState(null);
   const location = useLocation();
   useSocket();
+
+  useEffect(() => {
+    const handleConfetti = () => setConfettiKey(Date.now());
+    window.addEventListener(CONFETTI_EVENT, handleConfetti);
+    return () => window.removeEventListener(CONFETTI_EVENT, handleConfetti);
+  }, []);
 
   const title = PAGE_TITLES[location.pathname] || 'EcoSphere';
 
@@ -32,6 +40,7 @@ export const AppShell = () => {
           <Outlet />
         </main>
       </div>
+      {confettiKey && <Confetti key={confettiKey} onDone={() => setConfettiKey(null)} />}
     </div>
   );
 };

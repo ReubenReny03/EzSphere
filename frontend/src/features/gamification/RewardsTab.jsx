@@ -1,23 +1,40 @@
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Gift } from 'lucide-react';
+import { Gift, Plus, Pencil, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useAuth } from '@/context/AuthContext';
-import { useRewards } from '@/api/hooks/useBadgesRewards';
+import { useRewards, useDeleteReward } from '@/api/hooks/useBadgesRewards';
 import { useRedeemReward } from '@/api/hooks/useRewardRedemption';
+import { RewardModal } from './RewardModal';
 
 export const RewardsTab = () => {
   const { user } = useAuth();
+  const isAdmin = user?.role === 'admin';
   const { data, isLoading } = useRewards({ status: 'active', limit: 50 });
   const redeem = useRedeemReward();
+  const deleteReward = useDeleteReward();
   const rewards = data?.data || [];
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingReward, setEditingReward] = useState(null);
 
   const handleRedeem = async (reward) => {
     try {
       await redeem.mutateAsync(reward._id);
       toast.success(`Redeemed "${reward.name}"`);
+    } catch (err) {
+      // handled globally
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Deactivate this reward?')) return;
+    try {
+      await deleteReward.mutateAsync(id);
+      toast.success('Reward deactivated');
     } catch (err) {
       // handled globally
     }
@@ -34,33 +51,80 @@ export const RewardsTab = () => {
     );
   }
 
-  if (rewards.length === 0) return <EmptyState icon={Gift} message="No rewards available yet" />;
-
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {rewards.map((reward) => {
-        const canAfford = (user?.pointsBalance ?? 0) >= reward.pointsRequired;
-        return (
-          <Card key={reward._id}>
-            <h3 className="font-semibold text-text">{reward.name}</h3>
-            <p className="mt-1 text-sm text-muted">{reward.description}</p>
-            <div className="mt-3 flex items-center justify-between text-sm">
-              <span className="text-game">{reward.pointsRequired} pts</span>
-              <span className="text-muted">{reward.stock} in stock</span>
-            </div>
-            <Button
-              size="sm"
-              variant="game"
-              className="mt-4 w-full"
-              disabled={reward.stock === 0 || !canAfford}
-              loading={redeem.isPending}
-              onClick={() => handleRedeem(reward)}
-            >
-              {reward.stock === 0 ? 'Out of Stock' : canAfford ? 'Redeem' : 'Not Enough Points'}
-            </Button>
-          </Card>
-        );
-      })}
+    <div className="flex flex-col gap-4">
+      {isAdmin && (
+        <div className="flex justify-end">
+          <Button
+            variant="game"
+            size="sm"
+            onClick={() => {
+              setEditingReward(null);
+              setModalOpen(true);
+            }}
+          >
+            <Plus className="h-4 w-4" />
+            New Reward
+          </Button>
+        </div>
+      )}
+
+      {rewards.length === 0 ? (
+        <EmptyState icon={Gift} message="No rewards available yet" />
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {rewards.map((reward) => {
+            const canAfford = (user?.pointsBalance ?? 0) >= reward.pointsRequired;
+            return (
+              <Card key={reward._id}>
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-semibold text-text">{reward.name}</h3>
+                  {isAdmin && (
+                    <div className="flex shrink-0 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingReward(reward);
+                          setModalOpen(true);
+                        }}
+                        aria-label="Edit reward"
+                        className="text-muted hover:text-text"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(reward._id)}
+                        aria-label="Deactivate reward"
+                        className="text-muted hover:text-danger"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <p className="mt-1 text-sm text-muted">{reward.description}</p>
+                <div className="mt-3 flex items-center justify-between text-sm">
+                  <span className="text-game">{reward.pointsRequired} pts</span>
+                  <span className="text-muted">{reward.stock} in stock</span>
+                </div>
+                <Button
+                  size="sm"
+                  variant="game"
+                  className="mt-4 w-full"
+                  disabled={reward.stock === 0 || !canAfford}
+                  loading={redeem.isPending}
+                  onClick={() => handleRedeem(reward)}
+                >
+                  {reward.stock === 0 ? 'Out of Stock' : canAfford ? 'Redeem' : 'Not Enough Points'}
+                </Button>
+              </Card>
+            );
+          })}
+        </div>
+      )}
+
+      <RewardModal open={modalOpen} onClose={() => setModalOpen(false)} reward={editingReward} />
     </div>
   );
 };

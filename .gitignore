@@ -18,3 +18,4 @@ backend/uploads/*
 
 
 CLAUDE.md
+frontend/.env.example
