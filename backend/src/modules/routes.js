@@ -1,0 +1,42 @@
+import { Router } from 'express';
+import authRoutes from './auth/auth.routes.js';
+import departmentsRoutes from './departments/departments.routes.js';
+import categoriesRoutes from './categories/categories.routes.js';
+import emissionFactorsRoutes from './emissionFactors/emissionFactors.routes.js';
+import productsRoutes from './products/products.routes.js';
+import goalsRoutes from './goals/goals.routes.js';
+import policiesRoutes from './policies/policies.routes.js';
+import badgesRoutes from './badges/badges.routes.js';
+import rewardsRoutes from './rewards/rewards.routes.js';
+import scoringRoutes from './scoring/scoring.routes.js';
+import carbonRoutes from './carbon/carbon.routes.js';
+import csrRoutes from './csr/csr.routes.js';
+import challengesRoutes from './challenges/challenges.routes.js';
+import auditsRoutes from './audits/audits.routes.js';
+import complianceRoutes from './compliance/compliance.routes.js';
+import gamificationRoutes from './gamification/gamification.routes.js';
+import notificationsRoutes from './notifications/notifications.routes.js';
+import settingsRoutes from './settings/settings.routes.js';
+
+const router = Router();
+
+router.use('/auth', authRoutes);
+router.use('/departments', departmentsRoutes);
+router.use('/categories', categoriesRoutes);
+router.use('/emission-factors', emissionFactorsRoutes);
+router.use('/products', productsRoutes);
+router.use('/goals', goalsRoutes);
+router.use('/policies', policiesRoutes);
+router.use('/badges', badgesRoutes);
+router.use('/rewards', rewardsRoutes);
+router.use('/scoring', scoringRoutes);
+router.use('/carbon', carbonRoutes);
+router.use('/csr', csrRoutes);
+router.use('/challenges', challengesRoutes);
+router.use('/audits', auditsRoutes);
+router.use('/compliance', complianceRoutes);
+router.use('/gamification', gamificationRoutes);
+router.use('/notifications', notificationsRoutes);
+router.use('/settings', settingsRoutes);
+
+export default router;
